@@ -1,0 +1,97 @@
+# ================================================
+# 连线消消乐 - Git 忽略文件配置
+# 包含所有子项目需要忽略的文件
+# ================================================
+
+# ====== 通用 ======
+.DS_Store
+*.log
+*.tmp
+*.temp
+.env
+.env.local
+.env.*.local
+*.bak
+*.swp
+*.swo
+*~
+
+# ====== IDE / 编辑器 ======
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.factorypath
+*.sublime-project
+*.sublime-workspace
+
+# ====== Backend (Java/Maven) ======
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.class
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+backend/logs/
+backend/*.log
+backend/HELP.md
+
+# ====== Frontend Admin (Vue/Vite/Node) ======
+frontend-admin/node_modules/
+frontend-admin/dist/
+frontend-admin/.npm/
+frontend-admin/.pnpm-store/
+frontend-admin/npm-debug.log*
+frontend-admin/yarn-debug.log*
+frontend-admin/yarn-error.log*
+frontend-admin/pnpm-debug.log*
+frontend-admin/.cache/
+frontend-admin/.vite/
+frontend-admin/*.local
+
+# ====== Frontend MP (抖音小游戏) ======
+frontend-mp/node_modules/
+frontend-mp/.npm/
+frontend-mp/miniprogramRoot/
+frontend-mp/unpackage/
+
+# ====== Frontend User (如有用户端) ======
+frontend-user/node_modules/
+frontend-user/dist/
+frontend-user/.npm/
+frontend-user/.cache/
+
+# ====== Docker ======
+docker-compose.override.yml
+.docker/
+*.tar
+
+# ====== 数据库 ======
+*.sql.bak
+*.db
+*.sqlite
+
+# ====== 系统文件 ======
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+
+# ====== 测试 / 覆盖率 ======
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+junit.xml
+
+# ====== 构建产物 ======
+build/
+out/
+*.gz
+*.zip
