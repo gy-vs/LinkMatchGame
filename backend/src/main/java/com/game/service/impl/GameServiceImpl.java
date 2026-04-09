@@ -67,6 +67,7 @@ public class GameServiceImpl implements GameService {
         recordMapper.insert(record);
         
         Integer currentMaxScore = leaderboardMapper.selectUserMaxScore(submitDTO.getUserId());
+        userService.updateScore(submitDTO.getUserId(), submitDTO.getScore());
         if (submitDTO.getScore() > currentMaxScore) {
             leaderboardMapper.delete(
                 new LambdaQueryWrapper<Leaderboard>().eq(Leaderboard::getUserId, submitDTO.getUserId())
@@ -76,7 +77,6 @@ public class GameServiceImpl implements GameService {
             leaderboard.setScore(submitDTO.getScore());
             leaderboard.setUpdatedAt(LocalDateTime.now());
             leaderboardMapper.insert(leaderboard);
-            userService.updateScore(submitDTO.getUserId(), submitDTO.getScore());
         }
         Integer rank = leaderboardMapper.selectUserRank(submitDTO.getUserId());
         
@@ -90,8 +90,18 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<RankVO> getTopRank(int limit) {
         List<RankVO> rankList = leaderboardMapper.selectTopN(limit);
-        AtomicInteger rankNum = new AtomicInteger(1);
-        rankList.forEach(r -> r.setRank(rankNum.getAndIncrement()));
+        int currentRank = 1;
+        int sameRankCount = 0;
+        Integer prevScore = null;
+        for (RankVO r : rankList) {
+            if (prevScore != null && !prevScore.equals(r.getScore())) {
+                currentRank = currentRank + sameRankCount;
+                sameRankCount = 0;
+            }
+            r.setRank(currentRank);
+            sameRankCount++;
+            prevScore = r.getScore();
+        }
         return rankList;
     }
 
