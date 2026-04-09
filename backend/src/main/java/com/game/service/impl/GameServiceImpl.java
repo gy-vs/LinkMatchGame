@@ -23,7 +23,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Service
@@ -66,6 +65,7 @@ public class GameServiceImpl implements GameService {
         record.setCreatedAt(LocalDateTime.now());
         recordMapper.insert(record);
         
+        userService.updateScore(submitDTO.getUserId(), submitDTO.getScore());
         Integer currentMaxScore = leaderboardMapper.selectUserMaxScore(submitDTO.getUserId());
         if (submitDTO.getScore() > currentMaxScore) {
             leaderboardMapper.delete(
@@ -76,7 +76,6 @@ public class GameServiceImpl implements GameService {
             leaderboard.setScore(submitDTO.getScore());
             leaderboard.setUpdatedAt(LocalDateTime.now());
             leaderboardMapper.insert(leaderboard);
-            userService.updateScore(submitDTO.getUserId(), submitDTO.getScore());
         }
         Integer rank = leaderboardMapper.selectUserRank(submitDTO.getUserId());
         
@@ -90,8 +89,17 @@ public class GameServiceImpl implements GameService {
     @Override
     public List<RankVO> getTopRank(int limit) {
         List<RankVO> rankList = leaderboardMapper.selectTopN(limit);
-        AtomicInteger rankNum = new AtomicInteger(1);
-        rankList.forEach(r -> r.setRank(rankNum.getAndIncrement()));
+        int rankNum = 1;
+        for (int i = 0; i < rankList.size(); i++) {
+            RankVO current = rankList.get(i);
+            if (i > 0) {
+                RankVO prev = rankList.get(i - 1);
+                if (current.getScore() < prev.getScore()) {
+                    rankNum = i + 1;
+                }
+            }
+            current.setRank(rankNum);
+        }
         return rankList;
     }
 
