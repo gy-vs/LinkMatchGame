@@ -60,8 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateScore(Long userId, Integer score) {
         User user = baseMapper.selectById(userId);
         if (user == null) throw new BusinessException(ResultCode.USER_NOT_FOUND);
-        user.setScore(score);
-        user.setLevel(user.getScore() / 500 + 1);
+        user.setScore(user.getScore() + score);
+        user.setLevel(user.getScore() / 1000 + 1);
         user.setUpdatedAt(LocalDateTime.now());
         baseMapper.updateById(user);
     }

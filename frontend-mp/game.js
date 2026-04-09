@@ -452,6 +452,7 @@ function initBoard() {
   var grid = currentLevel.grid;
   var totalCells = grid * grid;
   var actualPairs = Math.floor(totalCells / 2);
+  pairs = actualPairs;
   var pool = [];
   for (var i = 0; i < actualPairs; i++) {
     var icon = CONFIG.ICONS[i % CONFIG.ICONS.length];

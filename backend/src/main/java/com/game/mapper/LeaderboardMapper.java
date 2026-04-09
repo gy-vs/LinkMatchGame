@@ -19,7 +19,7 @@ public interface LeaderboardMapper extends BaseMapper<Leaderboard> {
             "LIMIT #{limit}")
     List<RankVO> selectTopN(@Param("limit") int limit);
     
-    @Select("SELECT COUNT(*) + 1 FROM leaderboard WHERE score >= " +
+    @Select("SELECT COUNT(DISTINCT score) + 1 FROM leaderboard WHERE score > " +
             "(SELECT COALESCE(MAX(score), 0) FROM leaderboard WHERE user_id = #{userId})")
     Integer selectUserRank(@Param("userId") Long userId);
     
