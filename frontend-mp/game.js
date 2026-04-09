@@ -450,12 +450,13 @@ function startGame(level) {
 
 function initBoard() {
   var grid = currentLevel.grid;
-  var totalCells = grid * grid;
-  var actualPairs = Math.floor(totalCells / 2);
   var pool = [];
-  for (var i = 0; i < actualPairs; i++) {
+  for (var i = 0; i < pairs; i++) {
     var icon = CONFIG.ICONS[i % CONFIG.ICONS.length];
     pool.push(icon, icon);
+  }
+  while (pool.length < grid * grid) {
+    pool.push(null);
   }
   for (var j = pool.length - 1; j > 0; j--) {
     var k = Math.floor(Math.random() * (j + 1));
